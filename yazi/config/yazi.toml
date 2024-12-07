@@ -1,0 +1,23 @@
+# package.toml
+[plugin]
+deps = [
+  { use = "Reledia/glow", rev = "388e847" },
+]
+prepend_previewers = [
+  { mime = "{image,audio,video}/*", run = "mediainfo"},
+  { mime = "application/x-subrip", run = "mediainfo"},
+  # { name = "image/*", run = "kitty +kitten icat" },
+ { name = "*.md", run = "glow" },
+]
+#prepend_previewers = [
+# { name = "*.jpeg", run = "kitty +kitten icat" },
+# { name = "*.jpg", run = "kitty +kitten icat" },
+# { name = "*.png", run = "kitty +kitten icat" },
+# { name = "*.md", run = "glow" },
+  # { mime = "{image,audio,video}/*", run = "mediainfo"},
+  # { mime = "application/x-subrip", run = "mediainfo"},
+#]
+
+[opener]
+edit = [
+	{ run = '${EDITOR:=nvim} "$@"', desc = "$EDITOR", block = true, for = "unix" },]

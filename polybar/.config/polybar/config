@@ -1,0 +1,339 @@
+include-file = $HOME/.config/polybar/user_modules.ini
+;include-file = $HOME/.config/polybar/colors.ini
+;include-file = $HOME/.config/polybar/fonts.ini
+
+;---------------------------------------
+;		Global - COLORS
+;---------------------------------------
+[colors]
+;background = #282a36
+background = #cc282a36
+foreground = #f8f8f2
+;foreground = #22f8f8f2
+red        = #ff5555
+green      = #50fa7b
+yellow     = #f1fa8c
+blue       = #bd93f9
+purple     = #ff79c6
+orange     = #8be9fd
+gray       = #6272a4
+
+bg = #18181B
+bg-alt = #20212C
+fg = #A0A0AB
+fg-alt = #5D5E72
+
+#blue = #6BA2FF
+cyan = #45FFFF
+#green = #96F7C8
+#orange = #FFBA63
+pink = #FF6B9D
+#purple = #E66AFC
+#red = #FF7575
+#yellow = #FFFF39
+
+trans = #00000000
+semi-trans-black = #cc000000
+
+shade-1 = #5D5E72
+shade-2 = #7A7B8C
+shade-3 = #A0A0AB
+shade-4 = #CACACE
+shade-5 = #F8F8F8
+
+
+;---------------------------------------
+;		Global - MAIN BARS
+;---------------------------------------
+
+[bar/raybar]
+monitor = DP-4
+
+width = 100%
+height = 20
+;offset-x = 1%
+;offset-y = 1%
+;radius = 10.0
+fixed-center = true
+
+background = ${colors.background}
+foreground = ${colors.foreground}
+
+;border-left-size = 10
+;border-bottom-size = 10
+;border-right-size = 10
+
+padding-left = 2
+padding-right = 2
+
+module-margin-left = 1
+module-margin-right = 1
+
+
+;override-redirect = true
+override-redirect = false
+wm-restack = i3
+scroll-up = i3-msg workspace next_on_output
+scroll-down = i3-msg workspace prev_on_output
+
+
+font-0 = jetbrainsmono nerdfont:pixelsize=11;2
+font-1 = Font Awesome 6 Free:pixelsize=14;2
+font-2 = Material Icons:size=12;2
+font-3 = Feather:size=10.4;3.5
+;font-3 = "Material Icons:size=11;4"
+;font-4 = "Material Icons Outlined:size=11;4"
+;font-5 = "Material Icons Round:size=11;4"
+;font-6 = "Material Icons Sharp:size=11;4"
+;font-7 = "Material Icons TwoTone:size=11;4"
+
+modules-left = i3
+modules-center = xwindow
+modules-right = pulseaudio cpu memory network vpn date session powermenu
+
+
+;---------------------------------------
+;		Modules - SEPARATOR
+;---------------------------------------
+
+[module/separator]
+type = custom/text
+content = |
+content-foreground = #ffffffff
+
+;---------------------------------------
+;		Modules - CPU
+;---------------------------------------
+
+[module/cpu]
+type = internal/cpu
+interval = 2
+format = <label>
+format-padding = 1
+format-prefix = CPU
+format-prefix-foreground = ${colors.green}
+label = %percentage:2%%
+label-foreground = ${colors.foreground}
+label-padding = 1
+
+
+;---------------------------------------
+;		Modules - MEMORY
+;---------------------------------------
+
+[module/memory]
+type = internal/memory
+interval = 2
+format = <label>
+format-padding = 1
+format-prefix = MEM
+format-prefix-foreground = ${colors.blue}
+;format-underline = #4bffdc
+label = %percentage_used:2%%
+label-foreground = ${colors.foreground}
+label-padding = 1
+
+;---------------------------------------
+;		Modules - NETWORK
+;---------------------------------------
+
+;[module/network]
+;type = internal/network
+;interface = enp6s0
+;interval = 3.0
+;format-padding = 1
+;format-connected-underline = #55aa55
+;format-connected-prefix = 
+;format-connected-prefix-foreground = ${colors.purple}
+;label-foreground = ${colors.foreground}
+;label-padding = 1
+;label-connected = %local_ip%
+;label-connected-padding = 1
+
+
+;---------------------------------------
+;		Modules - AUDIO
+;---------------------------------------
+
+[module/pulseaudio]
+type = internal/pulseaudio
+
+;format = <label>
+format-volume = <label-volume>
+label-volume =   %percentage%%
+label-foreground = ${colors.yellow}
+format-foreground = ${colors.yellow}
+
+
+label-muted =   0%
+label-muted-foreground = ${colors.gray}
+
+bar-volume-width = 10
+bar-volume-foreground-0 = #55aa55
+bar-volume-foreground-1 = #55aa55
+bar-volume-foreground-2 = #55aa55
+bar-volume-foreground-3 = #55aa55
+bar-volume-foreground-4 = #55aa55
+bar-volume-foreground-5 = #f5a70a
+bar-volume-foreground-6 = #ff5555
+bar-volume-gradient = false
+bar-volume-indicator-font = 2
+bar-volume-fill = ─
+bar-volume-fill-font = 2
+bar-volume-empty = ─
+bar-volume-empty-font = 2
+bar-volume-empty-foreground = ${colors.foreground}
+
+
+
+
+;---------------------------------------
+;		Modules - XWINDOW
+;---------------------------------------
+
+[module/xwindow]
+type = internal/xwindow
+label = %title:0:30:...%
+
+;---------------------------------------
+;		Modules - DATE
+;---------------------------------------
+
+[module/date]
+type = internal/date
+interval = 1
+date = "%b %d"
+time = "%l:%M:%S %p"
+format-prefix = " "
+format-prefix-foreground = ${colors.orange}
+;format-underline = #0a6cf5
+label = %date% %time%
+click-right = /usr/bin/gnome-calendar
+
+
+
+;---------------------------------------
+;		Modules - i3
+;---------------------------------------
+[module/i3]
+type = internal/i3
+
+; Only show workspaces defined on the same output as the bar
+;
+; Useful if you want to show monitor specific workspaces
+; on different bars
+;
+; Default: false
+pin-workspaces = true
+
+; Show urgent workspaces regardless of whether the workspace is actually hidden
+; by pin-workspaces.
+;
+; Default: false
+; New in version 3.6.0
+show-urgent = false
+
+; This will split the workspace name on ':'
+; Default: false
+strip-wsnumbers = true
+
+; Sort the workspaces by index instead of the default
+; sorting that groups the workspaces by output
+; Default: false
+index-sort = true
+
+; Create click handler used to focus workspace
+; Default: true
+enable-click = false
+
+; Create scroll handlers used to cycle workspaces
+; Default: true
+enable-scroll = false
+
+; Wrap around when reaching the first/last workspace
+; Default: true
+wrapping-scroll = false
+
+; Set the scroll cycle direction
+; Default: true
+reverse-scroll = false
+
+; Use fuzzy (partial) matching for wc-icon.
+; Example: code;♚ will apply the icon to all workspaces
+; containing 'code' in the name
+; Changed in version 3.7.0: Selects longest string match instead of the first match.
+; Default: false
+fuzzy-match = true
+
+; ws-icon-[0-9]+ = <label>;<icon>
+; NOTE: The <label> needs to match the name of the i3 workspace
+; Neither <label> nor <icon> can contain a semicolon (;)
+ws-icon-0 = 1;♚
+ws-icon-1 = 2;♛
+ws-icon-2 = 3;♜
+ws-icon-3 = 4;♝
+ws-icon-4 = 5;♞
+ws-icon-default = ♟
+; NOTE: You cannot skip icons, e.g. to get a ws-icon-6
+; you must also define a ws-icon-5.
+; NOTE: Icon will be available as the %icon% token inside label-*
+
+; Available tags:
+;   <label-state> (default) - gets replaced with <label-(focused|unfocused|visible|urgent)>
+;   <label-mode> (default)
+format = <label-state> <label-mode>
+
+; Available tokens:
+;   %mode%
+; Default: %mode%
+label-mode = %mode%
+label-mode-padding = 2
+label-mode-background = #e60053
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-focused = %index%
+label-focused-foreground = #000000
+#label-focused-background = #3f3f3f
+label-focused-background = ${colors.orange}
+label-focused-underline = #fba922
+label-focused-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-unfocused = %index%
+label-unfocused-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-visible = %index%
+label-visible-underline = #555555
+label-visible-padding = 4
+
+; Available tokens:
+;   %name%
+;   %icon%
+;   %index%
+;   %output%
+; Default: %icon% %name%
+label-urgent = %index%
+label-urgent-foreground = #000000
+label-urgent-background = #bd2c40
+label-urgent-padding = 4
+
+; Separator in between workspaces
+label-separator = |
+label-separator-padding = 2
+label-separator-foreground = #ffb52a

@@ -1,0 +1,106 @@
+# Configuration variables
+cxx_flags := "-std=c++17 -Wall -Wextra -O2"
+c_flags := "-std=c17 -Wall -Wextra -O2"
+
+# Ensure output directory exists
+_make-dir path:
+    mkdir -p {{path}}/out
+
+# Detect file type
+_detect-type file:
+    #!/usr/bin/env bash
+    if [[ "{{file}}" == *.cpp ]]; then
+        echo "cpp"
+    elif [[ "{{file}}" == *.c ]]; then
+        echo "c"
+    elif [[ "{{file}}" == *.rs ]]; then
+        echo "rust"
+    else
+        echo "unsupported"
+        exit 1
+    fi
+
+_build-file path file deps_list="":
+    #!/usr/bin/env bash
+    type=$(just -g _detect-type {{file}})
+    src_path="{{path}}/{{file}}"
+    bin_name="{{path}}/out/{{file}}.bin"
+    # Check if binary exists and is up to date
+    if [[ -f "$bin_name" ]] && [[ "$src_path" -ot "$bin_name" ]]; then
+        echo "{{file}} is up to date, skipping build."
+        exit 0
+    fi
+    # Check and build dependencies first
+    if [ ! -z "{{deps_list}}" ]; then
+        IFS=',' read -ra DEPS <<< "{{deps_list}}"
+        for dep in "${DEPS[@]}"; do
+            just -g build "$dep"
+        done
+    fi
+    # Build the file
+    case $type in
+        cpp)
+            echo "Building C++ file {{file}}..."
+            # If dependencies exist, include their object files
+            if [ ! -z "{{deps_list}}" ]; then
+                dep_objs=""
+                IFS=',' read -ra DEPS <<< "{{deps_list}}"
+                for dep in "${DEPS[@]}"; do
+                    dep_objs+="{{path}}/out/$dep.o "
+                done
+                g++ "$src_path" $dep_objs -o "$bin_name" {{cxx_flags}}
+            else
+                g++ "$src_path" -o "$bin_name" {{cxx_flags}}
+            fi
+            ;;
+        c)
+            echo "Building C file {{file}}..."
+            if [ ! -z "{{deps_list}}" ]; then
+                dep_objs=""
+                IFS=',' read -ra DEPS <<< "{{deps_list}}"
+                for dep in "${DEPS[@]}"; do
+                    dep_objs+="{{path}}/out/$dep.o "
+                done
+                gcc "$src_path" $dep_objs -o "$bin_name" {{c_flags}}
+            else
+                gcc "$src_path" -o "$bin_name" {{c_flags}}
+            fi
+            ;;
+        rust)
+            echo "Building Rust file {{file}}..."
+            rustc "$src_path" -o "$bin_name"
+            ;;
+        *)
+            echo "Unsupported file type"
+            exit 1
+            ;;
+    esac
+
+# Build a file with optional dependencies
+build path file deps_list="":
+    just -g _make-dir {{path}}
+    just -g _build-file {{path}} {{file}} "{{deps_list}}"
+
+# Run a file with optional dependencies
+run path file deps_list="":
+    #!/usr/bin/env bash
+    # Ensure the file is built
+    just -g build {{path}} {{file}} "{{deps_list}}"
+    echo "--"
+    # Run the built binary
+    "{{path}}/out/{{file}}.bin"
+
+# Clean output directory
+clean path:
+    echo "Cleaning up..."
+    rm -rf {{path}}/out
+
+# List available source files
+list:
+    #!/usr/bin/env bash
+    echo "C++ files:"
+    ls *.cpp 2>/dev/null || echo "No C++ files"
+    echo -e "\nC files:"
+    ls *.c 2>/dev/null || echo "No C files"
+    echo -e "\nRust files:"
+    ls *.rs 2>/dev/null || echo "No Rust files"
