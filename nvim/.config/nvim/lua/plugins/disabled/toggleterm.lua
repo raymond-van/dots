@@ -1,3 +1,4 @@
+if true then return {} end
 return {
   'akinsho/toggleterm.nvim',
   version = '*',
@@ -12,12 +13,19 @@ return {
           term:send(cmd, true)
         end
       end,
-      winbar = {
-        enabled = true,
-        name_formatter = function(term) --  term: Terminal
-          return term.name
-        end,
-      },
+      -- winbar = {
+      -- enabled = false,
+      -- name_formatter = function(term) --  term: Terminal
+      -- return term.name
+      -- end,
+      -- },
+      -- size = 20 | function(term)
+      -- if term.direction == 'horizontal' then
+      -- return 15
+      -- elseif term.direction == 'vertical' then
+      -- return vim.o.columns * 0.4
+      -- end
+      -- end,
     }
   end,
 }

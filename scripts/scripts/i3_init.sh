@@ -3,14 +3,16 @@
 # Applications to launch
 apps=(
   # "/usr/bin/kitty"  # Terminal
-  "/home/ray/.local/bin/Obsidian/Obsidian-1.7.6.AppImage"   # Note-taking app
-  "/usr/bin/firefox"    # Browser
+  # "/usr/bin/kitty tmux new -A -s home"  # Terminal with tmux session
+  "/usr/bin/kitty tmux a"  # Terminal with tmux session
+  # "/home/ray/.local/bin/Obsidian/Obsidian-1.7.6.AppImage"   # Note-taking app
+  "/usr/bin/brave-browser"    # Browser
 )
 
 # Workspaces for each application
 workspaces=(
-  # "1"  # Workspace 1 for terminal
-  "9"  # Workspace 3 for obs
+  "2"  # Workspace 1 for terminal
+  # "10"  # Workspace 3 for obs
   "1"  # Workspace 2 for firefox
 )
 

@@ -618,6 +618,8 @@ return {
       [[ ⠀⠀⠀⠀⠀⠀⠙⠛⠛⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ]],
       [[ ⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⡴⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀ ]],
       [[                                          ]],
+      [[★ any sufficiently advanced technology is indistinguishable from magic ★]],
+      -- [["any sufficiently advanced technology is indistinguishable from magic"]],
     }
     -- local default_text = {}
     -- local custom_text = dashboard.section.header.val
@@ -641,9 +643,10 @@ return {
           type = 'padding',
           val = 1,
         },
-        dashboard.button('n', '  New File', ':enew | NvimTreeFocus<CR>', { desc = 'New file' }),
+        dashboard.button('n', '  New File', ':enew <CR>', { desc = 'New file' }),
+        dashboard.button('f', '  Find Files', ':Telescope find_files<CR>'),
         dashboard.button('r', '  Recent Files', ':Telescope oldfiles<CR>', { desc = 'Old files' }),
-        dashboard.button('f', '  Find File', ':Telescope find_files<CR>'),
+        dashboard.button('s', '  Sessions', ':SessionSearch<CR>', { desc = 'Yazi' }),
         dashboard.button('g', '󰈞  Grep', '<CMD>Telescope live_grep<CR>'),
         dashboard.button('l', '󰒲  Lazy', ':Lazy<CR>', { desc = 'Lazy' }),
         dashboard.button('y', '  Yazi', ':Yazi<CR>', { desc = 'Yazi' }),

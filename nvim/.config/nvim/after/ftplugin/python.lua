@@ -1,3 +1,5 @@
+-- remove trailing whitespace on save
+vim.api.nvim_create_autocmd("BufWritePre", { callback = function() local save_cursor = vim.fn.getpos(".") vim.cmd([[%s/\s+$//e]]) vim.fn.setpos(".", save_cursor) end, })
 -- Map Shift+Enter to run a Python file
 vim.keymap.set('n', '<S-CR>', function()
   local file = vim.fn.expand '%:p' -- Get the full path of the current file

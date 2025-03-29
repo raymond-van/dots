@@ -1,9 +1,12 @@
+if true then
+  return {}
+end
 return {
   'zbirenbaum/neodim',
   event = 'LspAttach',
   config = function()
     require('neodim').setup {
-      alpha = 0.75,
+      alpha = 0.70,
       blend_color = '#000000',
       hide = {
         underline = true,

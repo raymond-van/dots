@@ -22,11 +22,31 @@ return {
       desc = 'Resume the last yazi session',
     },
   },
-  opts = {
-    -- if you want to open yazi instead of netrw, see below for more info
-    open_for_directories = false,
-    keymaps = {
-      show_help = '<f1>',
-    },
-  },
+  config = function()
+    require('yazi').setup {
+      -- enable this if you want to open yazi instead of netrw.
+      -- Note that if you enable this, you need to call yazi.setup() to
+      -- initialize the plugin. lazy.nvim does this for you in certain cases.
+      --
+      -- If you are also using neotree, you may prefer not to bring it up when
+      -- opening a directory:
+      {
+        'nvim-neo-tree/neo-tree.nvim',
+        opts = {
+          filesystem = {
+            hijack_netrw_behavior = 'true',
+          },
+        },
+      },
+      open_for_directories = true,
+      -- open visible splits as yazi tabs for easy navigation. Requires a yazi
+      -- version more recent than 2024-08-11
+      -- https://github.com/mikavilpas/yazi.nvim/pull/359
+      open_multiple_tabs = true,
+      -- log_level = vim.log.levels.DEBUG,
+      keymaps = {
+        show_help = '<f1>',
+      },
+    }
+  end,
 }

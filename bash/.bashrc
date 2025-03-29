@@ -164,3 +164,7 @@ function y() {
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/ray/.cache/lm-studio/bin"
+. "/home/ray/.deno/env"
+[ -f ~/.fzf.bash ] && source ~/.fzf.bash
+export PATH="/usr/local/cuda-12/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda-12/lib64:$LD_LIBRARY_PATH"

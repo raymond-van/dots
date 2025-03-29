@@ -23,14 +23,34 @@ return {
         hide_hidden = false, --
       },
       window = {
+        width = 25,
         mappings = {
           ['\\'] = 'close_window',
+          ['<C-CR>'] = {
+            'open',
+            config = {
+              open_in_background = true, -- This should open the file in a buffer without focusing it
+            },
+          },
+          ['<MiddleMouse>'] = {
+            'open',
+            config = {
+              open_in_background = true, -- This should open the file in a buffer without focusing it
+            },
+          },
         },
       },
       follow_current_file = {
         enabled = true, -- This will find and focus the file in the active buffer every time
         --               -- the current file is changed while the tree is open.
         leave_dirs_open = false, -- `false` closes auto expanded dirs, such as with `:Neotree reveal`
+      },
+    },
+    buffers = {
+      window = {
+        width = 25,
+        position = 'bottom',
+        height = 10,
       },
     },
   },

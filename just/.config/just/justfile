@@ -88,7 +88,8 @@ run path file deps_list="":
     just -g build {{path}} {{file}} "{{deps_list}}"
     echo "--"
     # Run the built binary
-    "{{path}}/out/{{file}}.bin"
+    "{{path}}/out/{{file}}.bin > {{path}}/out/{{file}}.txt"
+    "{{path}}/out/{{file}}.bin" | tee "{{path}}/out/{{file}}.txt"
 
 # Clean output directory
 clean path:

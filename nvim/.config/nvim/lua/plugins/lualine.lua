@@ -27,12 +27,14 @@ return {
     -- Define your lualine configuration here
     require('lualine').setup {
       options = {
+        ignore_focus = { '*' }, -- This will make all unfocused windows have empty statuslines
         icons_enabled = true,
         theme = 'palenight', -- Replace with your preferred theme
         component_separators = { left = '', right = '' },
         section_separators = { left = '', right = '' },
+        globalstatus = true, -- Add this line to enable global statusline
         disabled_filetypes = {
-          statusline = {},
+          statusline = { '%' }, -- Add this line to disable statusline for inactive windows
           winbar = {},
         },
         always_divide_middle = true,
@@ -59,8 +61,10 @@ return {
       inactive_sections = {
         lualine_a = {},
         lualine_b = {},
-        lualine_c = { 'filename' },
-        lualine_x = { 'location' },
+        lualine_c = {},
+        -- lualine_c = { 'filename' },
+        -- lualine_x = { 'location' },
+        lualine_x = {},
         lualine_y = {},
         lualine_z = {},
       },

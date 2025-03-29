@@ -1,4 +1,4 @@
-/home/ray/code/lib/pfetch/pfetch
+# /home/ray/code/lib/pfetch/pfetch
 
 # onefetch https://github.com/o2sh/onefetch
 # git repository greeter
@@ -22,6 +22,8 @@
 # adds time to startup
 #check_directory_for_new_repository
 
+eval "$(zoxide init zsh)"
+
 # Enable Powerlevel10k instant prompt. Should stay close to the top of ~/.zshrc.
 # Initialization code that may require console input (password prompts, [y/n]
 # confirmations, etc.) must go above this block; everything else may go below.
@@ -34,6 +36,7 @@ fi
 
 # Path to your Oh My Zsh installation.
 export ZSH="$HOME/.oh-my-zsh"
+export TMUX_PLUGIN_MANAGER_PATH="$HOME/.tmux/plugins"
 
 # Set name of the theme to load --- if set to "random", it will
 # load a random theme each time Oh My Zsh is loaded, in which case,
@@ -96,13 +99,13 @@ PF_ASCII="Catppuccin"
 # dots
 DOTS="/home/ray/dots"
 # ollama
-Environment="OLLAMA_FLASH_ATTENTION=true"
-Environment="OLLAMA_NVIDIA_VISIBLE_DEVICES=all"
-Environment="OLLAMA_KV_CACHE_TYPE=q6"
-Environment="CUDA_VISIBLE_DEVICES=0"
+OLLAMA_FLASH_ATTENTION=true
+OLLAMA_NVIDIA_VISIBLE_DEVICES="all"
+# OLLAMA_KV_CACHE_TYPE="q6"
+CUDA_VISIBLE_DEVICES=0
 #Environment="OLLAMA_KEEP_ALIVE=-1"
-#Environment="OLLAMA_MODELS=/path/to/models"
-
+OLLAMA_MODELS="/home/ray/models/ollama"
+PKG_CONFIG_PATH="/usr/lib/x86_64-linux-gnu/pkgconfig/openssl.pc"
 
 # Uncomment the following line if you want to change the command execution time
 # stamp shown in the history command output.
@@ -180,8 +183,9 @@ fi
 ###############################################################
 
 # Initialize compinit
-#autoload -U compinit
-#compinit
+autoload -U compinit
+compinit
+
 
 # >>> conda initialize >>>
 # !! Contents within this block are managed by 'conda init' !!
@@ -196,10 +200,19 @@ export PATH="/home/ray/miniforge3/bin:$PATH"
 fi
 fi
 unset __conda_setup
-
 if [ -f "/home/ray/miniforge3/etc/profile.d/mamba.sh" ]; then
 . "/home/ray/miniforge3/etc/profile.d/mamba.sh"
 fi
+if [[ -n "$TMUX" ]] then
+  export flavor='mamba'
+  source $HOME/.tmux/plugins/tmux-conda-inherit/conda-inherit.sh
+fi
+
+# tmux-window-name() {
+# 	($TMUX_PLUGIN_MANAGER_PATH/tmux-window-name/scripts/rename_session_windows.py &)
+# }
+
+# add-zsh-hook chpwd tmux-window-name
 
 #yazi shell wrapper
 function y() {
@@ -211,7 +224,20 @@ function y() {
 	rm -f -- "$tmp"
 }
 
-
+# 1. cd and then ls if the destination is a dir - including backwards with - 
+# 2. Just cd to home if there is no destination 
+# 3. $EDITOR <dest> if the destination is one or more files
+function c() {
+  if [[ $# -eq 1 && ( -d "$1" || "$1" == "-" ) ]]; then
+    builtin cd "$1" && ls -bvxAF --color --group-directories-first
+  elif [[ $# -eq 0 ]]; then
+    builtin cd "$HOME" || return
+  elif [[ -f "$1" || ! -e "$1" || $# -gt 1 ]]; then
+    $EDITOR "$@"
+  else
+    printf "t: case not accounted for\n"
+  fi
+}
 
 
 #export PATH="$PATH:/home/ray/.local/bin/Obsidian/"
@@ -220,10 +246,10 @@ function y() {
 #
 
 # Enable fzf key bindings
-[ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
+# [ -f /usr/share/doc/fzf/examples/key-bindings.zsh ] && source /usr/share/doc/fzf/examples/key-bindings.zsh
 #
 # # Enable fzf auto-completion
-[ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
+# [ -f /usr/share/doc/fzf/examples/completion.zsh ] && source /usr/share/doc/fzf/examples/completion.zsh
 #
 
 # fzf-tab configurations
@@ -246,6 +272,16 @@ zstyle ':fzf-tab:*' switch-group '<' '>'
 zstyle ':fzf-tab:*' fzf-command ftb-tmux-popup
 
 # ALIASES
+alias e=$EDITOR
+alias tma="tmux a"
+alias tmaa="tmux a -t"
+alias tmn="tmux new -s"
+alias tml="tmux ls"
+alias tmk="tmux kill-session"
+alias tmkk="tmux kill-session -t"
+alias tmks="tmux kill-server"
+alias tmd="tmux detach"
+alias tms="tmux source-file ~/dots/tmux/.tmux.conf"
 alias v="nvim"
 alias nv="nvim"
 alias vim="nvim"
@@ -255,14 +291,15 @@ alias inst="sudo apt install"
 alias instt="sudo apt -t bookworm-backports install"
 alias fixinst="sudo apt --fix-broken install"
 alias dpki="sudo dpkg -i"
-alias c="cd"
-alias l="ls"
+alias l="eza"
+alias ls="eza"
 alias cl="clear"
 alias clo="cd ~/.local/"
 alias cco="cd ~/code/"
 alias ccon="cd ~/.config/"
 alias cdow="cd ~/Downloads"
 alias cdoc="cd ~/Documents"
+alias cva="cd ~/Documents/vaulty/"
 alias cdo="cd $DOTS"
 alias vzsh="nvim $DOTS/zsh/.zshrc"
 alias szsh="source $DOTS/zsh/.zshrc"
@@ -286,7 +323,7 @@ alias mma='mamba activate'
 alias mmab='mamba activate base'
 alias mmc='mamba create -n'
 alias mmcf='mamba env create -f'
-alias mmcn='mamba create -y -n'
+alias mmcy='mamba create -y -n'
 alias mmconf='mamba config'
 alias mmcp='mamba create -y -p'
 alias mmcss='mamba config --show-source'
@@ -306,14 +343,14 @@ alias mmu='mamba update'
 alias mmua='mamba update --all'
 alias mmuc='mamba update conda'
 alias gjust='just --justfile ~/dots/just/.config/just/justfile'
+alias grep='rg'
+alias pss='ps aux | grep'
+alias kk='kill' 
+alias py='python' 
 # alias j=just
 # if no autocomplete for just, uncomment below
 # complete -F _just -o bashdefault -o default j
 
-
-# remap capslock and esc
-#xmodmap ~/.Xmodmap
-#xmodmap -e "clear Mod1"
 
 # Rust
 . "$HOME/.cargo/env"
@@ -321,10 +358,34 @@ alias gjust='just --justfile ~/dots/just/.config/just/justfile'
 # To customize prompt, run `p10k configure` or edit ~/.p10k.zsh.
 [[ ! -f $DOTS/p10k/.p10k.zsh ]] || source $DOTS/p10k/.p10k.zsh
 
-
 export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
 # Added by LM Studio CLI (lms)
 export PATH="$PATH:/home/ray/.cache/lm-studio/bin"
+. "/home/ray/.deno/env"
+
+# bun completions
+[ -s "/home/ray/.bun/_bun" ] && source "/home/ray/.bun/_bun"
+
+# bun
+export BUN_INSTALL="$HOME/.bun"
+export PATH="$BUN_INSTALL/bin:$PATH"
+
+# Open man pages with nvim
+export MANPAGER='nvim +Man!'
+
+# bindkey '^I'   autosuggest-accept # tab
+bindkey '^[[Z' autosuggest-accept # shift + tab
+# bindkey '^[[Z' complete-word # shift + tab
+# # Open in tmux popup if on tmux, otherwise use --height mode
+# export FZF_DEFAULT_OPTS='--height 40% --tmux bottom,40% --layout reverse --border top'
+
+
+[ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
+
+
+# CUDA12
+export PATH="/usr/local/cuda-12/bin:$PATH"
+export LD_LIBRARY_PATH="/usr/local/cuda-12/lib64:$LD_LIBRARY_PATH"

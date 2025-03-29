@@ -89,7 +89,7 @@ font-3 = Feather:size=10.4;3.5
 
 modules-left = i3
 modules-center = xwindow
-modules-right = pulseaudio cpu memory network vpn date session powermenu
+modules-right = pulseaudio cpu memory system-nvidia-smi network date session powermenu
 
 
 ;---------------------------------------

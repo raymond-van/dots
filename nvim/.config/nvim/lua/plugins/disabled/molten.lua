@@ -1,3 +1,6 @@
+if true then
+  return {}
+end
 return {
   'benlubas/molten-nvim',
   version = '^1.0.0', -- use version <2.0.0 to avoid breaking changes
@@ -21,6 +24,10 @@ return {
       max_width_window_percentage = math.huge,
       window_overlap_clear_enabled = true, -- toggles images when windows are overlapped
       window_overlap_clear_ft_ignore = { 'cmp_menu', 'cmp_docs', '' },
+      -- integrations = {
+      -- filetypes = { 'markdown', 'vimwiki', 'quarto' }, -- markdown extensions (ie. quarto) can go here
+      -- only_render_image_at_cursor = false,
+      -- },
     },
   },
 }
